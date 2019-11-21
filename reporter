@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+use Symfony\Component\Console\Application;
+use Reporter\GeneratePdfCommand;
+
+require 'vendor/autoload.php';
+
+\date_default_timezone_set('UTC');
+
+if (PHP_VERSION_ID < 70308) {
+    printf("Your php version is " . phpversion() . "\n");
+    printf("Please update your php version to 7.3.8 or later \n");
+    printf("run command: curl -s https://php-osx.liip.ch/install.sh | bash -s 7.3\n");
+    printf("run command: export PATH=/usr/local/php5/bin:\$PATH\n\n");
+    printf("Or find all necessary data on https://php-osx.liip.ch/\n");
+    exit();
+}
+
+$fileName = 'report.csv';
+if ( !file_exists($fileName) ) {
+    printf("please insert file " . $fileName . " in folder " . __DIR__ . "\n");
+    exit();
+}
+
+$app = new Application('Reporter', '1.0');
+$app->add(new GeneratePdfCommand());
+$app->run();

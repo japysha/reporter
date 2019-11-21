@@ -1,0 +1,16 @@
+{
+  "name": "japysha/reporter",
+  "description": "Pdf report from given csv file",
+  "version": "1.0.0",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "symfony/console": "~2.0",
+    "setasign/fpdf": "1.8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Reporter\\": "src"
+    }
+  }
+}
