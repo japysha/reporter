@@ -2,28 +2,33 @@
 
 namespace Reporter\Report;
 
+use DateInterval;
+use DateTime;
+use \Exception;
 use Reporter\Parser\CsvParser;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class Reporter
 {
 
     /**
-     * @param $fileName
+     * @param string $fileName
+     * @param ProgressBar $progressBar
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    public function createReport($fileName, $progressBar)
+    public function createReport(string $fileName, ProgressBar $progressBar)
     {
         $data = $this->parseCsvFile($fileName);
 
         if (array_key_first($data)) {
-            $firstDay = \DateTime::createFromFormat('d.m.Y', array_key_first($data));
+            $firstDay = DateTime::createFromFormat('d.m.Y', array_key_first($data));
             $firstDay->modify('first day of this month');
-            $lastDay = \DateTime::createFromFormat('d.m.Y', array_key_first($data));
+            $lastDay = DateTime::createFromFormat('d.m.Y', array_key_first($data));
             $lastDay->modify('last day of this month');
         } else {
-            $firstDay = new \DateTime('FIRST DAY OF PREVIOUS MONTH');
-            $lastDay = new \DateTime('LAST DAY OF PREVIOUS MONTH');
+            $firstDay = new DateTime('FIRST DAY OF PREVIOUS MONTH');
+            $lastDay = new DateTime('LAST DAY OF PREVIOUS MONTH');
         }
 
         $report = [];
@@ -38,6 +43,7 @@ class Reporter
                     'desc' => $data[$day->format('d.m.Y')]['workDescription'],
                     'weekend' => false
                 ];
+
                 $reporter = $data[$day->format('d.m.Y')]['fullName'];
                 $totalHours += $data[$day->format('d.m.Y')]['hours'];
             } else {
@@ -49,7 +55,7 @@ class Reporter
                 ];
             }
             $progressBar->advance();
-            $day->add(new \DateInterval('P1D'));
+            $day->add(new DateInterval('P1D'));
         }
         $fileName = str_replace(' ', '_', $reporter) . '_' . $firstDay->format('d_m_Y') . '-' . $lastDay->format('d_m_Y') . '_report.pdf';
         $this->createPDF($report, $fileName, $reporter, $totalHours);
@@ -71,7 +77,7 @@ class Reporter
     }
 
     /**
-     * @param \DateTime $date
+     * @param DateTime $date
      * @return bool
      */
     private function isWeekend($date) {
@@ -89,7 +95,7 @@ class Reporter
         $header = array('Date', 'Hours', 'Description');
         $pdf->SetFont('Arial','',14);
         $pdf->AddPage();
-        $pdf->FancyTable($header,$data);
+        $pdf->fancyTable($header,$data);
         $pdf->Ln();
         $pdf->Ln();
         $pdf->Cell(40,10,'total hours for '. $reporter. ': ' . round($total, 2));

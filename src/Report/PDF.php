@@ -3,24 +3,24 @@
 namespace Reporter\Report;
 
 use Reporter\Helper\ColorHelper;
+use \FPDF;
 
-
-class PDF extends \FPDF
+class PDF extends FPDF
 {
     /**
      * @param $header
      * @param $data
      */
-    function FancyTable($header, $data)
+    public function fancyTable($header, $data)
     {
-        $colors = parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR . '../../config.ini');
-        // Colors, line width and bold font
-        $headerColor = ColorHelper::hex2rgb($colors['headerColor']); //
-        $headerTextColor = ColorHelper::hex2rgb($colors['headerTextColor']); //['r' => 255, 'g' => 255, 'b' => 255];
-        $fillColor = ColorHelper::hex2rgb($colors['fillColor']); //['r' => 224, 'g' => 235, 'b' => 255];
-        $fillTextColor = ColorHelper::hex2rgb($colors['fillTextColor']); //['r' => 0, 'g' => 0, 'b' => 0];
-        $weekendColor = ColorHelper::hex2rgb($colors['weekendColor']); //['r' => 23, 'g' => 127, 'b' => 255];
-        $lineColor = ColorHelper::hex2rgb($colors['lineColor']); //['r' => 28, 'g' => 88, 'b' => 163];
+        $colors = $this->getColors();
+
+        $headerColor = ColorHelper::hex2rgb($colors['headerColor']);
+        $headerTextColor = ColorHelper::hex2rgb($colors['headerTextColor']);
+        $fillColor = ColorHelper::hex2rgb($colors['fillColor']);
+        $fillTextColor = ColorHelper::hex2rgb($colors['fillTextColor']);
+        $weekendColor = ColorHelper::hex2rgb($colors['weekendColor']);
+        $lineColor = ColorHelper::hex2rgb($colors['lineColor']);
 
         $this->SetFillColor($headerColor['r'], $headerColor['g'], $headerColor['b']);
         $this->SetTextColor($headerTextColor['r'], $headerTextColor['g'], $headerTextColor['b']);
@@ -34,6 +34,7 @@ class PDF extends \FPDF
             $this->Cell($columnWidth[$i], 7, $header[$i], 1, 0, 'C', true);
         }
         $this->Ln();
+
         // Color and font restoration
         $this->SetFillColor($fillColor['r'], $fillColor['g'], $fillColor['b']);
         $this->SetTextColor($fillTextColor['r']);
@@ -56,4 +57,13 @@ class PDF extends \FPDF
         // Closing line
         $this->Cell(array_sum($columnWidth),0,'','T');
     }
+
+    /**
+     * @return array|false
+     */
+    protected function getColors()
+    {
+        return parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR . '../../config.ini');
+    }
+
 }

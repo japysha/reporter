@@ -26,10 +26,13 @@ class GeneratePdfCommand extends Command
         try {
             $reporter = new Reporter();
             $fileName = $reporter->createReport($fileName, $progressBar);
+            $progressBar->finish();
+
             printf("Find your report in: " . __DIR__ . DIRECTORY_SEPARATOR . '../' . $fileName . "\n");
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
-        $progressBar->finish();
+
+        $output->writeln('');
     }
 }

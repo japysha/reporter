@@ -2,7 +2,9 @@
 
 namespace Reporter\Parser;
 
+use DateTime;
 use Reporter\Entity\JiraReport;
+use Reporter\Entity\ReportEntity;
 
 /**
  * Class CsvParser
@@ -12,7 +14,7 @@ class CsvParser implements Parser
     /**
      * @var array
      */
-    private $excludeLines = ['#', 'Issue Key'];
+    protected $excludeLines = ['#', 'Issue Key'];
 
     /**
      * @param $fileName
@@ -43,18 +45,18 @@ class CsvParser implements Parser
                 var_dump($data);exit();
             }
 
-            $timeReport = $this->getJiraReport($data);
+            $timeReport = $this->getReportEntity($data);
 
             if ($this->isAbsence($timeReport)) {
-                $timeReport->hours = 0;
-                $timeReport->workDescription = 'absence';
+                $timeReport->setHours(0);
+                $timeReport->setWorkDescription('absence');
             }
 
-            if (!array_key_exists($timeReport->workDate, $monthReport)) {
-                $monthReport[$timeReport->workDate] = (array)$timeReport;
+            if (!array_key_exists($timeReport->getWorkDate(), $monthReport)) {
+                $monthReport[$timeReport->getWorkDate()] = json_decode($timeReport->getJSONEncode(), true);
             } else {
-                $monthReport[$timeReport->workDate]['hours'] += $timeReport->hours;
-                $monthReport[$timeReport->workDate]['workDescription'] .= ';' . $timeReport->workDescription;
+                $monthReport[$timeReport->getWorkDate()]['hours'] += $timeReport->getHours();
+                $monthReport[$timeReport->getWorkDate()]['workDescription'] .= ';' . $timeReport->getWorkDescription();
             }
         }
         return $monthReport;
@@ -70,31 +72,31 @@ class CsvParser implements Parser
 
     /**
      * @param $string
-     * @return DateTime
+     * @return DateTime|false
      */
     private function createDateFromString($string)
     {
-        return \DateTime::createFromFormat('Y-m-d H:i', $string);
+        return DateTime::createFromFormat('Y-m-d H:i', $string);
     }
 
     /**
-     * @param $timeReport
+     * @param ReportEntity $timeReport
      * @return bool
      */
-    private function isAbsence($timeReport)
+    private function isAbsence(ReportEntity $timeReport)
     {
-        return strpos(strtolower($timeReport->issueSummary),'days off') !== false ||
-            strpos(strtolower($timeReport->issueSummary),'day off') !== false ||
-            strpos(strtolower($timeReport->issueSummary),'sickness') !== false ||
-            strpos(strtolower($timeReport->issueSummary),'sick') !== false ||
-            strpos(strtolower($timeReport->issueSummary),'leave of absence') !== false;
+        return strpos(strtolower($timeReport->getIssueSummary()),'days off') !== false ||
+            strpos(strtolower($timeReport->getIssueSummary()),'day off') !== false ||
+            strpos(strtolower($timeReport->getIssueSummary()),'sickness') !== false ||
+            strpos(strtolower($timeReport->getIssueSummary()),'sick') !== false ||
+            strpos(strtolower($timeReport->getIssueSummary()),'leave of absence') !== false;
     }
 
     /**
      * @param array|null $data
-     * @return JiraReport
+     * @return ReportEntity
      */
-    private function getJiraReport(?array $data): JiraReport
+    protected function getReportEntity(?array $data): ReportEntity
     {
         $timeReport = new JiraReport(
             $data[0],
@@ -135,7 +137,7 @@ class CsvParser implements Parser
      * @param string $data
      * @return bool
      */
-    private function excludeThisLine(string $data): bool
+    protected function excludeThisLine(string $data): bool
     {
         foreach ($this->excludeLines as $exclude) {
             if (strpos($data, $exclude) === 0) {

@@ -5,47 +5,38 @@ namespace Reporter\Entity;
  * Class JiraReport
  * @package Entity
  */
-class JiraReport
+class JiraReport implements ReportEntity
 {
-    /**
-     * @var string
-     */
-    public $issueKey;
-
-
-    public $issueSummary;
-
-    /**
-     * @var int
-     */
-    public $hours;
-    public $workDate;
-    public $username;
-    public $fullName;
-    public $period;
-    public $accountKey;
-    public $accountName;
-    public $accountLead;
-    public $accountCategory;
-    public $accountCustomer;
-    public $activityName;
-    public $component;
-    public $allComponents;
-    public $versionName;
-    public $issueType;
-    public $issueStatus;
-    public $projectKey;
-    public $projectName;
-    public $epic;
-    public $epicLink;
-    public $workDescription;
-    public $parentKey;
-    public $reporter;
-    public $externalHours;
-    public $billedHours;
-    public $issueOriginalEstimate;
-    public $issueRemainingEstimate;
-    public $epicName;
+    private $issueKey;
+    private $issueSummary;
+    private $hours;
+    private $workDate;
+    private $username;
+    private $fullName;
+    private $period;
+    private $accountKey;
+    private $accountName;
+    private $accountLead;
+    private $accountCategory;
+    private $accountCustomer;
+    private $activityName;
+    private $component;
+    private $allComponents;
+    private $versionName;
+    private $issueType;
+    private $issueStatus;
+    private $projectKey;
+    private $projectName;
+    private $epic;
+    private $epicLink;
+    private $workDescription;
+    private $parentKey;
+    private $reporter;
+    private $externalHours;
+    private $billedHours;
+    private $issueOriginalEstimate;
+    private $issueRemainingEstimate;
+    private $epicName;
 
     /**
      * JiraReport constructor.
@@ -112,5 +103,61 @@ class JiraReport
         $this->issueOriginalEstimate = $issueOriginalEstimate;
         $this->issueRemainingEstimate = $issueRemainingEstimate;
         $this->epicName = $epicName;
+    }
+
+    /**
+     * @param int $hours
+     */
+    public function setHours(int $hours)
+    {
+        $this->hours = $hours;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHours()
+    {
+        $this->hours;
+    }
+
+    /**
+     * @param $description
+     */
+    public function setWorkDescription($description)
+    {
+        $this->workDescription = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkDescription(): string
+    {
+        return $this->workDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkDate(): string
+    {
+        return $this->workDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIssueSummary(): string
+    {
+        return $this->issueSummary;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJSONEncode(): string
+    {
+        return json_encode(get_object_vars($this));
     }
 }

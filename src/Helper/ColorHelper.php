@@ -12,6 +12,7 @@ class ColorHelper
      * @return array
      */
     public static function hex2rgb($hex) {
+
         $hex = str_replace("#", "", $hex);
 
         if(strlen($hex) == 3) {
