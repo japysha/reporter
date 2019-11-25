@@ -37,3 +37,4 @@ composer.lock
 *.pidb
 *.svclog
 *.scc
+*.idea
