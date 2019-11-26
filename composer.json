@@ -16,8 +16,7 @@
         "setasign/fpdf": "1.8.1",
         "ext-json": "*"
     },
-    "minimum-stability": "dev",
-
+    "minimum-stability": "stable",
 
     "repositories": [
         {
