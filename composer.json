@@ -1,17 +1,33 @@
 {
-  "name": "japysha/reporter",
-  "description": "Pdf report from given csv file",
-  "version": "1.0.0",
-  "type": "project",
-  "license": "proprietary",
-  "require": {
-    "symfony/console": "~2.0",
-    "setasign/fpdf": "1.8.1",
-    "ext-json": "*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Reporter\\": "src"
+    "name": "japysha/reporter",
+    "description": "Pdf report from given csv file",
+    "version": "1.0.0",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Ivan Markovic",
+            "email": "ivan.markovicc@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3.0",
+        "symfony/console": "2.0",
+        "setasign/fpdf": "1.8.1",
+        "ext-json": "*"
+    },
+    "minimum-stability": "dev",
+
+
+    "repositories": [
+        {
+            "type": "github",
+            "url": "https://github.com/japysha/reporter"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Reporter\\": "src"
+        }
     }
-  }
 }
