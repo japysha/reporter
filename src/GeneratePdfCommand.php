@@ -19,7 +19,12 @@ class GeneratePdfCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fileName = __DIR__ . DIRECTORY_SEPARATOR . '../report.csv';
+        $fileName = dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . 'report.csv';
+
+        if ( !file_exists($fileName) ) {
+            $output->writeln('<error>please insert file report.csv in folder ' . dirname(__DIR__, 1) . '</error>');
+            exit();
+        }
 
         $progressBar = new ProgressBar($output, 50);
         $progressBar->start();
@@ -28,7 +33,8 @@ class GeneratePdfCommand extends Command
             $fileName = $reporter->createReport($fileName, $progressBar);
             $progressBar->finish();
 
-            printf("Find your report in: " . __DIR__ . DIRECTORY_SEPARATOR . '../' . $fileName . "\n");
+            $output->writeln('');
+            $output->writeln('<info>Find your report in: ' . __DIR__ . DIRECTORY_SEPARATOR . '../' . $fileName . '</info>');
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

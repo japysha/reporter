@@ -17,12 +17,10 @@ if (PHP_VERSION_ID < 70308) {
     exit();
 }
 
-$fileName = 'report.csv';
-if ( !file_exists($fileName) ) {
-    printf("please insert file " . $fileName . " in folder " . __DIR__ . "\n");
-    exit();
-}
-
 $app = new Application('Reporter', '1.0');
 $app->add(new GeneratePdfCommand());
-$app->run();
+try {
+    $app->run();
+} catch (Exception $e) {
+
+}

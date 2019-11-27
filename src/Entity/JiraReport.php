@@ -106,19 +106,19 @@ class JiraReport implements ReportEntity
     }
 
     /**
-     * @param int $hours
+     * @param float $hours
      */
-    public function setHours(int $hours)
+    public function setHours(float $hours)
     {
         $this->hours = $hours;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getHours()
+    public function getHours(): float
     {
-        $this->hours;
+        return $this->hours;
     }
 
     /**

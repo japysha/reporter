@@ -63,7 +63,8 @@ class PDF extends FPDF
      */
     protected function getColors()
     {
-        return parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR . '../../config.ini');
+        $configData = parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR . '../../config.ini', true);
+        return $configData['colors'];
     }
 
 }

@@ -6,15 +6,15 @@ namespace Reporter\Entity;
 interface ReportEntity
 {
     /**
-     * @param int $hours
+     * @param float $hours
      * @return mixed
      */
-    public function setHours(int $hours);
+    public function setHours(float $hours);
 
     /**
-     * @return int
+     * @return float
      */
-    public function getHours();
+    public function getHours(): float;
 
     /**
      * @param $description

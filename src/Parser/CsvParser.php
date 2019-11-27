@@ -12,11 +12,6 @@ use Reporter\Entity\ReportEntity;
 class CsvParser implements Parser
 {
     /**
-     * @var array
-     */
-    protected $excludeLines = ['#', 'Issue Key'];
-
-    /**
      * @param $fileName
      * @return mixed
      */
@@ -51,7 +46,6 @@ class CsvParser implements Parser
                 $timeReport->setHours(0);
                 $timeReport->setWorkDescription('absence');
             }
-
             if (!array_key_exists($timeReport->getWorkDate(), $monthReport)) {
                 $monthReport[$timeReport->getWorkDate()] = json_decode($timeReport->getJSONEncode(), true);
             } else {
@@ -85,11 +79,16 @@ class CsvParser implements Parser
      */
     private function isAbsence(ReportEntity $timeReport)
     {
-        return strpos(strtolower($timeReport->getIssueSummary()),'days off') !== false ||
-            strpos(strtolower($timeReport->getIssueSummary()),'day off') !== false ||
-            strpos(strtolower($timeReport->getIssueSummary()),'sickness') !== false ||
-            strpos(strtolower($timeReport->getIssueSummary()),'sick') !== false ||
-            strpos(strtolower($timeReport->getIssueSummary()),'leave of absence') !== false;
+        $configData = parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR . '../../config.ini');
+        $excludedTasks = $configData['excluded_tasks'];
+
+        foreach ($excludedTasks as $task) {
+            if (strpos(strtolower($timeReport->getIssueSummary()), strtolower($task)) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -139,7 +138,9 @@ class CsvParser implements Parser
      */
     protected function excludeThisLine(string $data): bool
     {
-        foreach ($this->excludeLines as $exclude) {
+        $configData = parse_ini_file(__DIR__ . DIRECTORY_SEPARATOR . '../../config.ini');
+        $excludeLines = $configData['excluded_lines'];
+        foreach ($excludeLines as $exclude) {
             if (strpos($data, $exclude) === 0) {
                 return true;
             }
