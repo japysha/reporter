@@ -14,7 +14,7 @@ class GeneratePdfCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('generate-pdf');
+        $this->setName('generate:pdf');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

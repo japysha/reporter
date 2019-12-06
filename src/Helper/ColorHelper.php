@@ -7,6 +7,7 @@ namespace Reporter\Helper;
  */
 class ColorHelper
 {
+    public static $rgxHexColor = '/#([a-f]|[A-F]|[0-9]){6}\b/';
     /**
      * @param $hex
      * @return array

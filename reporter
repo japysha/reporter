@@ -3,6 +3,7 @@
 
 use Symfony\Component\Console\Application;
 use Reporter\GeneratePdfCommand;
+use Reporter\SetParamsCommand;
 
 require 'vendor/autoload.php';
 
@@ -19,6 +20,7 @@ if (PHP_VERSION_ID < 70308) {
 
 $app = new Application('Reporter', '1.0');
 $app->add(new GeneratePdfCommand());
+$app->add(new SetParamsCommand());
 try {
     $app->run();
 } catch (Exception $e) {
